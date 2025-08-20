@@ -1,0 +1,22 @@
+# docker-compose.yml
+
+version: '3.8'
+
+services:
+  headscale:
+    image: headscale/headscale:latest # For production, pin a specific version e.g., headscale/headscale:0.22.3
+    container_name: headscale
+    restart: unless-stopped
+    volumes:
+      # Mount the config directory
+      - ./config:/etc/headscale
+      # Mount the data directory for the SQLite database
+      - ./data:/var/lib/headscale
+    ports:
+      # Main API port
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:9090:9090"
+      # DERP protocol for NAT traversal
+      - "3478:3478/udp"
+      - "5349:5349/udp"
+    command: serve
